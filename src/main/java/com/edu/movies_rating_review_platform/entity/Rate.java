@@ -5,9 +5,7 @@ import lombok.Data;
 @Data
 public class Rate {
 
-    private long id;
-
-    private int rate; // 1 to 10
+    private int rateValue; // 1 to 10
 
     private int voteCount;
 }
