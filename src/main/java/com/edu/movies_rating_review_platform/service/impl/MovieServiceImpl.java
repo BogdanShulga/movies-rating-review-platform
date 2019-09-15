@@ -110,7 +110,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public ResponseEntity<List<Movie>> getAllMoviesByRating() {
         List<Movie> movies = movieRepository.findAll();
-        Comparator<Movie> comparator = Comparator.comparingInt(movie -> movie.getRate().getRateValue());
+        Comparator<Movie> comparator = Comparator.comparingDouble(movie -> movie.getRate().getRateValue());
         movies.sort(comparator.reversed());
         return ResponseEntity
                 .status(HttpStatus.FOUND)

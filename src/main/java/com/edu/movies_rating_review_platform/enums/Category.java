@@ -7,6 +7,7 @@ public enum Category {
     COM("comedy"),
     CRI("crime"),
     DRA("drama"),
+    FAM("family"),
     FAN("fantasy"),
     HIS("historical"),
     HIS_FI("historical fiction"),

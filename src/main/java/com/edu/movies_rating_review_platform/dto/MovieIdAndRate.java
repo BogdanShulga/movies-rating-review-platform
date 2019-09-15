@@ -7,5 +7,5 @@ public class MovieIdAndRate {
 
     private long movieId;
 
-    private int rate;
+    private double rate;
 }

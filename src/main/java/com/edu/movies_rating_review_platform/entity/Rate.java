@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Rate {
 
-    private int rateValue; // 1 to 10
+    private double rateValue; // 1 to 10
 
     private int voteCount;
 }
