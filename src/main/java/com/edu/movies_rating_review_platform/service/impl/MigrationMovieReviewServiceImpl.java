@@ -4,6 +4,7 @@ import com.edu.movies_rating_review_platform.entity.Movie;
 import com.edu.movies_rating_review_platform.entity.Rate;
 import com.edu.movies_rating_review_platform.entity.Review;
 import com.edu.movies_rating_review_platform.enums.Category;
+import com.edu.movies_rating_review_platform.repository.MovieRepository;
 import com.edu.movies_rating_review_platform.service.MigrationMovieReviewService;
 import com.edu.movies_rating_review_platform.service.MovieService;
 import com.edu.movies_rating_review_platform.service.ReviewService;
@@ -19,16 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MigrationMovieReviewServiceImpl implements MigrationMovieReviewService {
 
-    private final MovieService movieService;
-
     private final ReviewService reviewService;
+
+    private final MovieRepository movieRepository;
 
     public ResponseEntity<String> migrate() {
 
         List<Movie> movies = generateMovies();
 
         for (Movie movie: movies) {
-            movieService.addMovie(movie);
+            movieRepository.save(movie);
         }
 
         List<Review> reviews = generateReview();

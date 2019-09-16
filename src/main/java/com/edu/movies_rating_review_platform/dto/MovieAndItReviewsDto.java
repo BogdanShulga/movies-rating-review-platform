@@ -1,15 +1,14 @@
 package com.edu.movies_rating_review_platform.dto;
 
-import com.edu.movies_rating_review_platform.entity.Movie;
 import com.edu.movies_rating_review_platform.entity.Review;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class MovieAndItReviews {
+public class MovieAndItReviewsDto {
 
-    private Movie movie;
+    private MovieUserFriendlyDto movieUserFriendlyDto;
 
     private List<Review> reviews;
 }
