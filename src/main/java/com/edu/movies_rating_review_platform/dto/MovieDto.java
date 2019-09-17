@@ -43,6 +43,4 @@ public class MovieDto {
         movie.setRate(this.getRate());
         return movie;
     }
-
-
 }
