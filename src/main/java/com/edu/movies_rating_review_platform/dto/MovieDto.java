@@ -3,6 +3,7 @@ package com.edu.movies_rating_review_platform.dto;
 import com.edu.movies_rating_review_platform.entity.Movie;
 import com.edu.movies_rating_review_platform.entity.Rate;
 import com.edu.movies_rating_review_platform.enums.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -30,6 +31,7 @@ public class MovieDto {
         this.rate = movie.getRate();
     }
 
+    @JsonIgnore
     public Movie getMovieEntity() {
         Movie movie = new Movie();
         movie.setId(this.getId());

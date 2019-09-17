@@ -49,7 +49,9 @@ public class MovieServiceImpl implements MovieService {
 
         Optional<Movie> oldMovieOptional = movieRepository.findById(newMovie.getId());
 
-        oldMovieOptional.ifPresent(movie -> movieRepository.save(newMovie));
+        oldMovieOptional.ifPresentOrElse(movie -> movieRepository.save(newMovie), () -> {
+            throw new NotFoundExceptions();
+        });
 
         return "The movie \"" + newMovie.getName() + "\" is updated!";
     }
