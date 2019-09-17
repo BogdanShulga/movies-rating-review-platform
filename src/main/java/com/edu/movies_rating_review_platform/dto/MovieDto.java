@@ -6,7 +6,7 @@ import com.edu.movies_rating_review_platform.enums.Category;
 import lombok.Data;
 
 @Data
-public class MovieUserFriendlyDto {
+public class MovieDto {
 
     private long id;
 
@@ -20,10 +20,11 @@ public class MovieUserFriendlyDto {
 
     private Rate rate;
 
-    public MovieUserFriendlyDto(Movie movie) {
+    public MovieDto(Movie movie) {
         this.id = movie.getId();
         this.name = movie.getName();
-        this.category = movie.getCategory().name();
+        Category category = movie.getCategory();
+        this.category = category.getCategoryForUser();
         this.director = movie.getDirector();
         this.shortDescription = movie.getShortDescription();
         this.rate = movie.getRate();
@@ -31,15 +32,15 @@ public class MovieUserFriendlyDto {
 
     public Movie getMovieEntity() {
         Movie movie = new Movie();
-
         movie.setId(this.getId());
         movie.setName(this.getName());
-        Category category = Category.valueOf(this.getCategory());
+        Category category = Category.fromString(this.getCategory());
         movie.setCategory(category);
         movie.setDirector(this.getDirector());
         movie.setShortDescription(this.getShortDescription());
         movie.setRate(this.getRate());
-
         return movie;
     }
+
+
 }

@@ -6,9 +6,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MovieAndItReviewsDto {
+public class MovieReviewsDto {
 
-    private MovieUserFriendlyDto movieUserFriendlyDto;
+    private MovieDto movieDto;
 
     private List<Review> reviews;
 }

@@ -1,28 +1,26 @@
 package com.edu.movies_rating_review_platform.service;
 
-import com.edu.movies_rating_review_platform.dto.MovieAndItReviewsDto;
-import com.edu.movies_rating_review_platform.dto.MovieIdAndRateDto;
-import com.edu.movies_rating_review_platform.dto.MovieUserFriendlyDto;
-import com.edu.movies_rating_review_platform.entity.Movie;
-import org.springframework.http.ResponseEntity;
+import com.edu.movies_rating_review_platform.dto.MovieReviewsDto;
+import com.edu.movies_rating_review_platform.dto.RateDto;
+import com.edu.movies_rating_review_platform.dto.MovieDto;
 
 import java.util.List;
 
 public interface MovieService {
 
-    ResponseEntity<MovieUserFriendlyDto> addMovie(MovieUserFriendlyDto movieUserFriendlyDto);
+    MovieDto addMovie(MovieDto movieDto);
 
-    ResponseEntity<String> removeMovie(long id);
+    String removeMovie(long id);
 
-    ResponseEntity<String> updateMovie(MovieUserFriendlyDto newMovieUserFriendlyDto);
+    String updateMovie(MovieDto newMovieDto);
 
-    ResponseEntity<MovieAndItReviewsDto> getMovieAndItReviews(long id);
+    MovieReviewsDto getMovieAndItReviews(long id);
 
-    ResponseEntity<String> addRate(MovieIdAndRateDto movieIdAndRateDto);
+    String addRate(RateDto rateDto);
 
-    ResponseEntity<List<MovieUserFriendlyDto>> getAllMovies();
+    List<MovieDto> getAllMovies();
 
-    ResponseEntity<List<MovieUserFriendlyDto>> getAllMoviesByRating();
+    List<MovieDto> getAllMoviesByRating();
 
-    ResponseEntity<List<MovieUserFriendlyDto>> getAllMoviesByCategory();
+    List<MovieDto> getAllMoviesByCategory();
 }

@@ -25,15 +25,26 @@ public enum Category {
     SPE("speculative"),
     THR("thriller"),
     URB("urban"),
-    WES("western");
+    WES("western"),
 
-    private String category;
+    DEF("default");
 
-    Category(String category) {
-        this.category = category;
+    private String categoryForUser;
+
+    Category(String categoryForUser) {
+        this.categoryForUser = categoryForUser;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCategoryForUser() {
+        return categoryForUser;
+    }
+
+    public static Category fromString(String text) {
+        for (Category b : Category.values()) {
+            if (b.getCategoryForUser().equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return Category.DEF;
     }
 }

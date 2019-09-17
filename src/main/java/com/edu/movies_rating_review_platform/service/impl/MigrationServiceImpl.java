@@ -5,12 +5,9 @@ import com.edu.movies_rating_review_platform.entity.Rate;
 import com.edu.movies_rating_review_platform.entity.Review;
 import com.edu.movies_rating_review_platform.enums.Category;
 import com.edu.movies_rating_review_platform.repository.MovieRepository;
-import com.edu.movies_rating_review_platform.service.MigrationMovieReviewService;
-import com.edu.movies_rating_review_platform.service.MovieService;
+import com.edu.movies_rating_review_platform.service.MigrationService;
 import com.edu.movies_rating_review_platform.service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,13 +15,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MigrationMovieReviewServiceImpl implements MigrationMovieReviewService {
+public class MigrationServiceImpl implements MigrationService {
 
     private final ReviewService reviewService;
 
     private final MovieRepository movieRepository;
 
-    public ResponseEntity<String> migrate() {
+    public String migrate() {
 
         List<Movie> movies = generateMovies();
 
@@ -38,9 +35,7 @@ public class MigrationMovieReviewServiceImpl implements MigrationMovieReviewServ
             reviewService.addReview(review);
         }
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body("Added 5 documents to Movies collection and 10 documents reviews to Reviews collection!");
+        return "Added 5 documents to Movies collection and 10 documents to Reviews collection!";
     }
 
     private List<Movie> generateMovies() {
