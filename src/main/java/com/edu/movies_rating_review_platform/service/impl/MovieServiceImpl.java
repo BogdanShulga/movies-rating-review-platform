@@ -11,10 +11,10 @@ import com.edu.movies_rating_review_platform.repository.MovieRepository;
 import com.edu.movies_rating_review_platform.repository.ReviewRepository;
 import com.edu.movies_rating_review_platform.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,9 +102,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDto> getAllMoviesByRating() {
 
-        List<Movie> movies = movieRepository.findAll();
-        Comparator<Movie> comparator = Comparator.comparingDouble(movie -> movie.getRate().getRateValue());
-        movies.sort(comparator.reversed());
+        List<Movie> movies = movieRepository.findAllOrdered(new Sort(Sort.Direction.DESC, "rate.rateValue"));
 
         List<MovieDto> movieDtos = new ArrayList<>();
         movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
@@ -115,9 +113,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDto> getAllMoviesByCategory() {
 
-        List<Movie> movies = movieRepository.findAll();
-        Comparator<Movie> comparator = Comparator.comparing(Movie::getCategory);
-        movies.sort(comparator);
+        List<Movie> movies = movieRepository.findAllOrdered(new Sort(Sort.Direction.ASC, "category"));
 
         List<MovieDto> movieDtos = new ArrayList<>();
         movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
