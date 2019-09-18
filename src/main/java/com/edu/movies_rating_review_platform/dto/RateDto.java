@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class RateDto {
 
-    private long movieUserFriendlyDtoId;
+    private long movieDtoId;
 
     private double rate;
 }

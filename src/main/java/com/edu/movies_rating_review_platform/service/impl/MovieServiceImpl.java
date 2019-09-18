@@ -6,7 +6,7 @@ import com.edu.movies_rating_review_platform.dto.MovieDto;
 import com.edu.movies_rating_review_platform.entity.Movie;
 import com.edu.movies_rating_review_platform.entity.Rate;
 import com.edu.movies_rating_review_platform.entity.Review;
-import com.edu.movies_rating_review_platform.exception.NotFoundExceptions;
+import com.edu.movies_rating_review_platform.exception.NotFoundException;
 import com.edu.movies_rating_review_platform.repository.MovieRepository;
 import com.edu.movies_rating_review_platform.repository.ReviewRepository;
 import com.edu.movies_rating_review_platform.service.MovieService;
@@ -49,8 +49,10 @@ public class MovieServiceImpl implements MovieService {
 
         Optional<Movie> oldMovieOptional = movieRepository.findById(newMovie.getId());
 
-        oldMovieOptional.ifPresentOrElse(movie -> movieRepository.save(newMovie), () -> {
-            throw new NotFoundExceptions();
+        oldMovieOptional.ifPresentOrElse(movie -> movieRepository.save(newMovie), () -> { throw new NotFoundException(
+                "The movie with id = "
+                + newMovieDto.getId()
+                + " is not present in the database! Movie can't be updated! Please, give us correct data!");
         });
 
         return "The movie \"" + newMovie.getName() + "\" is updated!";
@@ -60,7 +62,9 @@ public class MovieServiceImpl implements MovieService {
     public MovieReviewsDto getMovieAndItReviews(long id) {
 
         Optional<Movie> optionalMovie = movieRepository.findById(id);
-        Movie movie = optionalMovie.orElseThrow(NotFoundExceptions::new);
+        Movie movie = optionalMovie.orElseThrow(() -> new NotFoundException("The movie with id = "
+                + id
+                + " is not present in the database! Please, give us correct movie id!"));
 
         MovieDto movieDto = new MovieDto(movie);
         List<Review> allReviewByMovieId = reviewRepository.findAllByMovieId(id);
@@ -75,8 +79,10 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public String addRate(RateDto rateDto) {
 
-        Optional<Movie> optionalMovie = movieRepository.findById(rateDto.getMovieUserFriendlyDtoId());
-        Movie movie = optionalMovie.orElseThrow(NotFoundExceptions::new);
+        Optional<Movie> optionalMovie = movieRepository.findById(rateDto.getMovieDtoId());
+        Movie movie = optionalMovie.orElseThrow(() -> new NotFoundException("The movie with id = "
+                + rateDto.getMovieDtoId()
+                + " is not present in the database! Rate can't be changed! Please, give us correct data!"));
 
         Rate rate = movie.getRate();
         rate.setVoteCount(rate.getVoteCount() + 1);
@@ -102,7 +108,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDto> getAllMoviesByRating() {
 
-        List<Movie> movies = movieRepository.findAllOrdered(new Sort(Sort.Direction.DESC, "rate.rateValue"));
+        List<Movie> movies = movieRepository.findAllOrderedBy(new Sort(Sort.Direction.DESC, "rate.rateValue"));
 
         List<MovieDto> movieDtos = new ArrayList<>();
         movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
@@ -113,7 +119,18 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<MovieDto> getAllMoviesByCategory() {
 
-        List<Movie> movies = movieRepository.findAllOrdered(new Sort(Sort.Direction.ASC, "category"));
+        List<Movie> movies = movieRepository.findAllOrderedBy(new Sort(Sort.Direction.ASC, "category"));
+
+        List<MovieDto> movieDtos = new ArrayList<>();
+        movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
+
+        return movieDtos;
+    }
+
+    @Override
+    public List<MovieDto> getAllMoviesWithRateGraterThen(double rateValue) {
+
+        List<Movie> movies = movieRepository.findByRateRateValueGreaterThanQuery(rateValue);
 
         List<MovieDto> movieDtos = new ArrayList<>();
         movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));

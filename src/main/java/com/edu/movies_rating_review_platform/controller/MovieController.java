@@ -96,4 +96,14 @@ public class MovieController {
                 .status(HttpStatus.FOUND)
                 .body(movieDtos);
     }
+
+    @GetMapping("/movie/{rateValue}")
+    public ResponseEntity<List<MovieDto>> getAllMoviesWithRateGraterThen(@PathVariable double rateValue) {
+
+        List<MovieDto> movieDtos = movieService.getAllMoviesWithRateGraterThen(rateValue);
+
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(movieDtos);
+    }
 }

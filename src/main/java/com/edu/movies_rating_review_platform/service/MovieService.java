@@ -23,4 +23,6 @@ public interface MovieService {
     List<MovieDto> getAllMoviesByRating();
 
     List<MovieDto> getAllMoviesByCategory();
+
+    List<MovieDto> getAllMoviesWithRateGraterThen(double rateValue);
 }
