@@ -15,7 +15,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = { NotFoundException.class})
     public ResponseEntity<Object> handleNotFoundException(RuntimeException ex, WebRequest request) {
 
-        String responseBody = ex.getMessage();
+        String responseBody = "The data you are requested is not present in the database! Please, give us correct data!";
 
         return handleExceptionInternal(ex, responseBody,
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);

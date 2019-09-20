@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,39 +45,23 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDto updateMovie(MovieDto newMovieDto) {
 
+        movieRepository.findById(newMovieDto.getId()).orElseThrow(NotFoundException::new);
+
         Movie newMovie = MovieConverter.getMovieEntity(newMovieDto);
 
-        List<Movie> updatedMovies = new ArrayList<>(); // variable in lambda must been effectively final, so I used list
-
-        movieRepository.findById(newMovie.getId()).ifPresentOrElse
-        (
-            movie -> updatedMovies.add(movieRepository.save(newMovie)),
-
-            () -> {
-                    throw new NotFoundException(
-                        "The movie with id = "
-                        + newMovieDto.getId()
-                        + " is not present in the database! Movie can't be updated! Please, give us correct data!"
-                        );
-                  }
-        );
-
-        return MovieConverter.getMovieDto(updatedMovies.get(0));
+        return MovieConverter.getMovieDto(movieRepository.save(newMovie));
     }
 
     @Override
     public MovieReviewsDto getMovieAndItReviews(long id) {
 
-        Optional<Movie> optionalMovie = movieRepository.findById(id);
-        Movie movie = optionalMovie.orElseThrow(() -> new NotFoundException("The movie with id = "
-                + id
-                + " is not present in the database! Please, give us correct movie id!"));
+        Movie existingMovie = movieRepository.findById(id).orElseThrow(NotFoundException::new);
 
-        MovieDto movieDto = MovieConverter.getMovieDto(movie);
+        MovieDto existingMovieDto = MovieConverter.getMovieDto(existingMovie);
         List<Review> allReviewByMovieId = reviewRepository.findAllByMovieId(id);
 
         MovieReviewsDto movieReviewsDto = new MovieReviewsDto();
-        movieReviewsDto.setMovieDto(movieDto);
+        movieReviewsDto.setMovieDto(existingMovieDto);
         movieReviewsDto.setReviews(allReviewByMovieId);
 
         return movieReviewsDto;
@@ -87,17 +70,14 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDto addRate(RateDto rateDto) {
 
-        Optional<Movie> optionalMovie = movieRepository.findById(rateDto.getMovieDtoId());
-        Movie movie = optionalMovie.orElseThrow(() -> new NotFoundException("The movie with id = "
-                + rateDto.getMovieDtoId()
-                + " is not present in the database! Rate can't be changed! Please, give us correct data!"));
+        Movie existingMovie = movieRepository.findById(rateDto.getMovieDtoId()).orElseThrow(NotFoundException::new);
 
-        Rate rate = movie.getRate();
+        Rate rate = existingMovie.getRate();
         rate.setVoteCount(rate.getVoteCount() + 1);
         rate.setRateValue((rate.getRateValue() + rateDto.getRate()) / 2);
+        existingMovie.setRate(rate);
 
-        movie.setRate(rate);
-        Movie updatedMovie = movieRepository.save(movie);
+        Movie updatedMovie = movieRepository.save(existingMovie);
 
         return MovieConverter.getMovieDto(updatedMovie);
     }
