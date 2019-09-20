@@ -1,11 +1,13 @@
 package com.edu.movies_rating_review_platform.service.impl;
 
+import com.edu.movies_rating_review_platform.converter.MovieConverter;
 import com.edu.movies_rating_review_platform.dto.MovieReviewsDto;
 import com.edu.movies_rating_review_platform.dto.RateDto;
 import com.edu.movies_rating_review_platform.dto.MovieDto;
 import com.edu.movies_rating_review_platform.entity.Movie;
 import com.edu.movies_rating_review_platform.entity.Rate;
 import com.edu.movies_rating_review_platform.entity.Review;
+import com.edu.movies_rating_review_platform.enums.Category;
 import com.edu.movies_rating_review_platform.exception.NotFoundException;
 import com.edu.movies_rating_review_platform.repository.MovieRepository;
 import com.edu.movies_rating_review_platform.repository.ReviewRepository;
@@ -29,33 +31,39 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDto addMovie(MovieDto movieDto) {
 
-        Movie movie = movieDto.getMovieEntity();
-        Movie movie1 = movieRepository.save(movie);
+        Movie movie = MovieConverter.getMovieEntity(movieDto);
+        Movie savedMovie = movieRepository.save(movie);
 
-        return new MovieDto(movie1);
+        return MovieConverter.getMovieDto(savedMovie);
     }
 
     @Override
-    public String removeMovie(long id) {
+    public void removeMovie(long id) {
 
         movieRepository.deleteById(id);
-        return "Movie with id: " + id + " is deleted!";
     }
 
     @Override
-    public String updateMovie(MovieDto newMovieDto) {
+    public MovieDto updateMovie(MovieDto newMovieDto) {
 
-        Movie newMovie = newMovieDto.getMovieEntity();
+        Movie newMovie = MovieConverter.getMovieEntity(newMovieDto);
 
-        Optional<Movie> oldMovieOptional = movieRepository.findById(newMovie.getId());
+        List<Movie> updatedMovies = new ArrayList<>(); // variable in lambda must been effectively final, so I used list
 
-        oldMovieOptional.ifPresentOrElse(movie -> movieRepository.save(newMovie), () -> { throw new NotFoundException(
-                "The movie with id = "
-                + newMovieDto.getId()
-                + " is not present in the database! Movie can't be updated! Please, give us correct data!");
-        });
+        movieRepository.findById(newMovie.getId()).ifPresentOrElse
+        (
+            movie -> updatedMovies.add(movieRepository.save(newMovie)),
 
-        return "The movie \"" + newMovie.getName() + "\" is updated!";
+            () -> {
+                    throw new NotFoundException(
+                        "The movie with id = "
+                        + newMovieDto.getId()
+                        + " is not present in the database! Movie can't be updated! Please, give us correct data!"
+                        );
+                  }
+        );
+
+        return MovieConverter.getMovieDto(updatedMovies.get(0));
     }
 
     @Override
@@ -66,7 +74,7 @@ public class MovieServiceImpl implements MovieService {
                 + id
                 + " is not present in the database! Please, give us correct movie id!"));
 
-        MovieDto movieDto = new MovieDto(movie);
+        MovieDto movieDto = MovieConverter.getMovieDto(movie);
         List<Review> allReviewByMovieId = reviewRepository.findAllByMovieId(id);
 
         MovieReviewsDto movieReviewsDto = new MovieReviewsDto();
@@ -77,7 +85,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public String addRate(RateDto rateDto) {
+    public MovieDto addRate(RateDto rateDto) {
 
         Optional<Movie> optionalMovie = movieRepository.findById(rateDto.getMovieDtoId());
         Movie movie = optionalMovie.orElseThrow(() -> new NotFoundException("The movie with id = "
@@ -89,9 +97,9 @@ public class MovieServiceImpl implements MovieService {
         rate.setRateValue((rate.getRateValue() + rateDto.getRate()) / 2);
 
         movie.setRate(rate);
-        Movie movie1 = movieRepository.save(movie);
+        Movie updatedMovie = movieRepository.save(movie);
 
-        return "Rate added to the movie \"" + movie1.getName() + "\" successfully!";
+        return MovieConverter.getMovieDto(updatedMovie);
     }
 
     @Override
@@ -100,7 +108,7 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> movies = movieRepository.findAll();
 
         List<MovieDto> movieDtos = new ArrayList<>();
-        movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
+        movies.forEach(movie -> movieDtos.add(MovieConverter.getMovieDto(movie)));
 
         return movieDtos;
     }
@@ -111,7 +119,7 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> movies = movieRepository.findAllOrderedBy(new Sort(Sort.Direction.DESC, "rate.rateValue"));
 
         List<MovieDto> movieDtos = new ArrayList<>();
-        movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
+        movies.forEach(movie -> movieDtos.add(MovieConverter.getMovieDto(movie)));
 
         return movieDtos;
     }
@@ -122,7 +130,7 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> movies = movieRepository.findAllOrderedBy(new Sort(Sort.Direction.ASC, "category"));
 
         List<MovieDto> movieDtos = new ArrayList<>();
-        movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
+        movies.forEach(movie -> movieDtos.add(MovieConverter.getMovieDto(movie)));
 
         return movieDtos;
     }
@@ -133,8 +141,14 @@ public class MovieServiceImpl implements MovieService {
         List<Movie> movies = movieRepository.findByRateRateValueGreaterThanQuery(rateValue);
 
         List<MovieDto> movieDtos = new ArrayList<>();
-        movies.forEach(movie -> movieDtos.add(new MovieDto(movie)));
+        movies.forEach(movie -> movieDtos.add(MovieConverter.getMovieDto(movie)));
 
         return movieDtos;
+    }
+
+    @Override
+    public List<Movie> getAllMoviesByEnumCategory(Category category) {
+
+        return movieRepository.findAllByCategory(category);
     }
 }

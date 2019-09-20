@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/migrate")
+@RequestMapping("/support")
 public class MigrationController {
 
     private final MigrationService migrationService;
 
-    @GetMapping
+    @GetMapping("/migrate")
     public ResponseEntity<String> migrate() {
 
         String answer = migrationService.migrate();

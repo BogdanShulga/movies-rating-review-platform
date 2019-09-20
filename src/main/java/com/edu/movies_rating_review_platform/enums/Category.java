@@ -27,24 +27,24 @@ public enum Category {
     URB("urban"),
     WES("western"),
 
-    DEF("default");
+    OTH("other");
 
-    private String categoryForUser;
+    private String category;
 
-    Category(String categoryForUser) {
-        this.categoryForUser = categoryForUser;
+    Category(String category) {
+        this.category = category;
     }
 
-    public String getCategoryForUser() {
-        return categoryForUser;
+    public String getCategory() {
+        return category;
     }
 
     public static Category fromString(String text) {
         for (Category b : Category.values()) {
-            if (b.getCategoryForUser().equalsIgnoreCase(text)) {
+            if (b.getCategory().equalsIgnoreCase(text)) {
                 return b;
             }
         }
-        return Category.DEF;
+        return Category.OTH;
     }
 }

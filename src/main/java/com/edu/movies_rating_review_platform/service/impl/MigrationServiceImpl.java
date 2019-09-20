@@ -5,8 +5,8 @@ import com.edu.movies_rating_review_platform.entity.Rate;
 import com.edu.movies_rating_review_platform.entity.Review;
 import com.edu.movies_rating_review_platform.enums.Category;
 import com.edu.movies_rating_review_platform.repository.MovieRepository;
+import com.edu.movies_rating_review_platform.repository.ReviewRepository;
 import com.edu.movies_rating_review_platform.service.MigrationService;
-import com.edu.movies_rating_review_platform.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,23 +17,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MigrationServiceImpl implements MigrationService {
 
-    private final ReviewService reviewService;
-
     private final MovieRepository movieRepository;
+
+    private final ReviewRepository reviewRepository;
 
     public String migrate() {
 
-        List<Movie> movies = generateMovies();
+        movieRepository.saveAll(generateMovies());
 
-        for (Movie movie: movies) {
-            movieRepository.save(movie);
-        }
-
-        List<Review> reviews = generateReview();
-
-        for (Review review: reviews) {
-            reviewService.addReview(review);
-        }
+        reviewRepository.saveAll(generateReview());
 
         return "Added 5 documents to Movies collection and 10 documents to Reviews collection!";
     }

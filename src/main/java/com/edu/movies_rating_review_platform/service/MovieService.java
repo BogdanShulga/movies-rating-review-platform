@@ -3,6 +3,8 @@ package com.edu.movies_rating_review_platform.service;
 import com.edu.movies_rating_review_platform.dto.MovieReviewsDto;
 import com.edu.movies_rating_review_platform.dto.RateDto;
 import com.edu.movies_rating_review_platform.dto.MovieDto;
+import com.edu.movies_rating_review_platform.entity.Movie;
+import com.edu.movies_rating_review_platform.enums.Category;
 
 import java.util.List;
 
@@ -10,13 +12,13 @@ public interface MovieService {
 
     MovieDto addMovie(MovieDto movieDto);
 
-    String removeMovie(long id);
+    void removeMovie(long id);
 
-    String updateMovie(MovieDto newMovieDto);
+    MovieDto updateMovie(MovieDto newMovieDto);
 
     MovieReviewsDto getMovieAndItReviews(long id);
 
-    String addRate(RateDto rateDto);
+    MovieDto addRate(RateDto rateDto);
 
     List<MovieDto> getAllMovies();
 
@@ -25,4 +27,6 @@ public interface MovieService {
     List<MovieDto> getAllMoviesByCategory();
 
     List<MovieDto> getAllMoviesWithRateGraterThen(double rateValue);
+
+    List<Movie> getAllMoviesByEnumCategory(Category category);
 }

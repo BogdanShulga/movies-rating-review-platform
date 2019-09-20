@@ -3,6 +3,8 @@ package com.edu.movies_rating_review_platform.controller;
 import com.edu.movies_rating_review_platform.dto.MovieReviewsDto;
 import com.edu.movies_rating_review_platform.dto.RateDto;
 import com.edu.movies_rating_review_platform.dto.MovieDto;
+import com.edu.movies_rating_review_platform.entity.Movie;
+import com.edu.movies_rating_review_platform.enums.Category;
 import com.edu.movies_rating_review_platform.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,17 +32,17 @@ public class MovieController {
     @DeleteMapping("/admin/movie/{id}")
     public ResponseEntity<String> removeMovie(@PathVariable long id) {
 
-        String answer = movieService.removeMovie(id);
+        movieService.removeMovie(id);
 
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
-                .body(answer);
+                .body("The movie with id = " + id + " is removed!");
     }
 
     @PutMapping("/admin/movie")
-    public ResponseEntity<String> updateMovie(@RequestBody MovieDto newMovieDto) {
+    public ResponseEntity<MovieDto> updateMovie(@RequestBody MovieDto newMovieDto) {
 
-        String answer = movieService.updateMovie(newMovieDto);
+        MovieDto answer = movieService.updateMovie(newMovieDto);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -58,9 +60,9 @@ public class MovieController {
     }
 
     @PatchMapping("/movie/rate")
-    public ResponseEntity<String> addRate(@RequestBody RateDto rateDto) {
+    public ResponseEntity<MovieDto> addRate(@RequestBody RateDto rateDto) {
 
-        String answer = movieService.addRate(rateDto);
+        MovieDto answer = movieService.addRate(rateDto);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -105,5 +107,15 @@ public class MovieController {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .body(movieDtos);
+    }
+
+    @GetMapping("/movie/category/{category}")
+    public ResponseEntity<List<Movie>> getAllMoviesByEnumCategory(@PathVariable Category category) {
+
+        List<Movie> movies = movieService.getAllMoviesByEnumCategory(category);
+
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(movies);
     }
 }

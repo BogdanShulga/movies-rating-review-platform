@@ -75,6 +75,9 @@ BODY:
     "isLiked" : "true"
 }
 ```
-
+***
+>get a movies list with a particular category:  
+GET: localhost:8080/movie/category/THR
+***
 
 
