@@ -18,12 +18,12 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    public ResponseEntity<String> addReview(@RequestBody Review review) {
+    public ResponseEntity<Review> addReview(@RequestBody Review review) {
 
-        String answer = reviewService.addReview(review);
+        Review savedReview = reviewService.addReview(review);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(answer);
+                .body(savedReview);
     }
 }

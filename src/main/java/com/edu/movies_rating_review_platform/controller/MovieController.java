@@ -22,11 +22,11 @@ public class MovieController {
     @PostMapping("/admin/movie")
     public ResponseEntity<MovieDto> addMovie(@RequestBody MovieDto movieDto) {
 
-        MovieDto movieDto1 = movieService.addMovie(movieDto);
+        MovieDto savedMovieDto = movieService.addMovie(movieDto);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(movieDto1);
+                .body(savedMovieDto);
     }
 
     @DeleteMapping("/admin/movie/{id}")
@@ -42,11 +42,11 @@ public class MovieController {
     @PutMapping("/admin/movie")
     public ResponseEntity<MovieDto> updateMovie(@RequestBody MovieDto newMovieDto) {
 
-        MovieDto answer = movieService.updateMovie(newMovieDto);
+        MovieDto savedMovieDto = movieService.updateMovie(newMovieDto);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(answer);
+                .body(savedMovieDto);
     }
 
     @GetMapping("/movie/reviews/{id}")

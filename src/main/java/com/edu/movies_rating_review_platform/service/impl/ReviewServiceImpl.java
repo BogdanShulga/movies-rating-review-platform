@@ -13,10 +13,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public String addReview(Review review) {
+    public Review addReview(Review review) {
 
-        reviewRepository.save(review);
-
-        return "Review is added!";
+        return reviewRepository.save(review);
     }
 }
