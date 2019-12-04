@@ -37,15 +37,19 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.edu</groupId>-->
+<!--            <artifactId>spring-boot-autoconfig-greeting-starter</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.edu</groupId>-->
+<!--            <artifactId>spring-boot-profile-starter</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>com.edu</groupId>
-            <artifactId>spring-boot-autoconfig-greeting-starter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.edu</groupId>
-            <artifactId>spring-boot-profile-starter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 

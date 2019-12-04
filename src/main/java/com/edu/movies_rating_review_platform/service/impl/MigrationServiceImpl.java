@@ -7,6 +7,7 @@ import com.edu.movies_rating_review_platform.enums.Category;
 import com.edu.movies_rating_review_platform.repository.MovieRepository;
 import com.edu.movies_rating_review_platform.repository.ReviewRepository;
 import com.edu.movies_rating_review_platform.service.MigrationService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class MigrationServiceImpl implements MigrationService {
         return "Added 5 documents to Movies collection and 10 documents to Reviews collection!";
     }
 
-    private List<Movie> generateMovies() {
+    public List<Movie> generateMovies() {
         List<Movie> movies = new ArrayList<>();
 
         Movie movie1 = new Movie();
@@ -111,7 +112,7 @@ public class MigrationServiceImpl implements MigrationService {
         return movies;
     }
 
-    private List<Review> generateReview() {
+    public List<Review> generateReview() {
         List<Review> reviews = new ArrayList<>();
 
         Review review1 = new Review();

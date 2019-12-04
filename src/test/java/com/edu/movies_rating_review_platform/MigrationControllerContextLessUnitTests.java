@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class migrationControllerContextLessTests {
+public class MigrationControllerContextLessUnitTests {
 
     @Mock
     private MigrationService migrationServiceMock;
