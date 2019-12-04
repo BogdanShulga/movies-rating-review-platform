@@ -8,6 +8,7 @@ import com.edu.movies_rating_review_platform.entity.Movie;
 import com.edu.movies_rating_review_platform.entity.Rate;
 import com.edu.movies_rating_review_platform.entity.Review;
 import com.edu.movies_rating_review_platform.enums.Category;
+import com.edu.movies_rating_review_platform.exception.NotFoundException;
 import com.edu.movies_rating_review_platform.repository.MovieRepository;
 import com.edu.movies_rating_review_platform.repository.ReviewRepository;
 import com.edu.movies_rating_review_platform.service.impl.MigrationServiceImpl;
@@ -82,6 +83,20 @@ public class MovieServiceImplContextLessUnitTest {
         verify(movieRepositoryMock, times(1)).findById(testMovieDto.getId());
 
         verify(movieRepositoryMock, times(1)).save(testMovie);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateMovieExceptionTest() {
+
+        when(movieRepositoryMock.findById(anyLong())).thenThrow(new NotFoundException());
+
+        when(movieRepositoryMock.save(testMovie)).thenReturn(testMovie);
+
+        movieService.updateMovie(testMovieDto);
+
+        verify(movieRepositoryMock, times(1)).findById(testMovieDto.getId());
+
+        verify(movieRepositoryMock, never()).save(testMovie);
     }
 
     @Test
